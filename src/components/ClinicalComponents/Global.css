@@ -1,0 +1,6 @@
+/* Estilo CSS para hacer el canvas responsivo */
+.canvas-container {
+    width: 100%;
+    height: auto;
+  }
+  
