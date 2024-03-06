@@ -1,11 +1,9 @@
 // WebcamComponent.js
 import React, { useRef, useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCamera } from "@fortawesome/free-solid-svg-icons";
-
 import { FaCamera } from "react-icons/fa";
 
 import Webcam from "react-webcam";
+import { Loader } from "./Loader";
 
 const WebcamComponent = ({ onCapture, handleClearLines }) => {
   const webcamRef = useRef(null);
@@ -55,7 +53,7 @@ const WebcamComponent = ({ onCapture, handleClearLines }) => {
       <div className="row">
         <div className="col col-md-12 text-center">
           {loading ? (
-            <p>Loading...</p>
+            <Loader />
           ) : (
             <button
               className="text-white mt-2"
