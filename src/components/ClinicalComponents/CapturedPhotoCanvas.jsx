@@ -1,19 +1,17 @@
 // CanvasComponent.js
 import { useEffect, useRef, useState } from "react";
 
-import ImgCapturedButtons from './CapturedPhotoButtons.jsx'
-import ClinicalPhotosList from './ClinicalPhotosList.jsx'
-import UserData from '../User/UserData.jsx'
-import StudiesHistorial from '../User/StudiesHistorial.jsx'
+import ImgCapturedButtons from "./CapturedPhotoButtons.jsx";
+import ClinicalPhotosList from "./ClinicalPhotosList.jsx";
+import UserData from "../User/UserData.jsx";
+import StudiesHistorial from "../User/StudiesHistorial.jsx";
 import CoordinatesList from "./ArrowsDescriptionList.jsx";
 import WebcamComponent from "./WebCam.jsx";
 
-import './Global.css'
-
-import "bootstrap/dist/css/bootstrap.min.css"; // Importar los estilos de Bootstrap
+import "./Global.css";
 
 const CanvasComponent = ({ arrowColor }) => {
-  const originalImg = useRef(null)
+  const originalImg = useRef(null);
   const canvasRef = useRef(null);
   const ctx = useRef(null);
   const linesRef = useRef([]);
@@ -27,19 +25,17 @@ const CanvasComponent = ({ arrowColor }) => {
   const [capturedImages, setCapturedImages] = useState([]);
   const [capturedArrowsSet, setCapturedArrowsSet] = useState([]);
 
-
   const [showCanvasComponent, setShowCanvasComponent] = useState(true);
-
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    
+
     if (!canvas) {
       return;
     }
 
     ctx.current = canvas.getContext("2d");
-    
+
     img.current.src = capturedImage;
     img.current.onload = () => {
       ctx.current.drawImage(img.current, 0, 0, canvas.width, canvas.height);
@@ -129,17 +125,17 @@ const CanvasComponent = ({ arrowColor }) => {
     linesRef.current.push({ startPoint, endPoint: startPoint });
     setRenderTrigger((prev) => !prev);
   };
-  
+
   const handleMouseMove = (e) => {
     if (!isDrawing.current) return;
-  
+
     const rect = canvasRef.current.getBoundingClientRect(); // Obtén la posición del canvas en la página
     const currentEndPoint = {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
     };
     linesRef.current[linesRef.current.length - 1].endPoint = currentEndPoint;
-  
+
     renderLines();
   };
 
@@ -148,14 +144,14 @@ const CanvasComponent = ({ arrowColor }) => {
   };
 
   const handleClearLines = () => {
-    setCapturedImage(originalImg.current);        
+    setCapturedImage(originalImg.current);
     linesRef.current = [];
     renderLines();
     setRenderTrigger((prev) => !prev);
   };
-  
-  const handleDeleteArrow = (index) => {        
-    linesRef.current.splice(index, 1);    
+
+  const handleDeleteArrow = (index) => {
+    linesRef.current.splice(index, 1);
     renderLines();
     setRenderTrigger((prev) => !prev);
   };
@@ -170,20 +166,20 @@ const CanvasComponent = ({ arrowColor }) => {
 
     renderLines();
   };
-  
-  const handleCaptureImage = (imgSrc) => {    
+
+  const handleCaptureImage = (imgSrc) => {
     originalImg.current = imgSrc;
-     // setCapturedImage('/img/descarga.jpg');
+    // setCapturedImage('/img/descarga.jpg');
     setCapturedImage(imgSrc);
-    setShowCanvasComponent(false); 
+    setShowCanvasComponent(false);
   };
 
-  const handleReturnToCam = () =>{
+  const handleReturnToCam = () => {
     linesRef.current = [];
     renderLines();
     setRenderTrigger((prev) => !prev);
-    setShowCanvasComponent(true); 
-  }
+    setShowCanvasComponent(true);
+  };
 
   const handleSaveThumbnail = () => {
     const thumbnailUrl = canvasRef.current.toDataURL();
@@ -192,19 +188,18 @@ const CanvasComponent = ({ arrowColor }) => {
       startPoint: { ...line.startPoint },
       endPoint: { ...line.endPoint },
     }));
-  
-    
+
     // Guarda la miniatura y las coordenadas en el estado
     setCapturedImageThumbnail(thumbnailUrl);
     setSavedArrowCoordinates(arrowCoordinates);
-    
+
     // Guarda la miniatura y las coordenadas en el estado
-    setCapturedImages([...capturedImages, thumbnailUrl]);    
+    setCapturedImages([...capturedImages, thumbnailUrl]);
     setCapturedArrowsSet([...capturedArrowsSet, arrowCoordinates]);
 
     linesRef.current = [];
     renderLines();
-    setCapturedImage(originalImg.current)
+    setCapturedImage(originalImg.current);
     setRenderTrigger((prev) => !prev);
   };
 
@@ -220,89 +215,76 @@ const CanvasComponent = ({ arrowColor }) => {
     setCapturedArrowsSet(updatedArrowsSet);
   };
 
-  const handleRenderImage = ( thumbnailUrl, arrowCoordinates ) => {    
-    
-    setCapturedImage(originalImg.current); 
-    linesRef.current = [...arrowCoordinates];        
+  const handleRenderImage = (thumbnailUrl, arrowCoordinates) => {
+    setCapturedImage(originalImg.current);
+    linesRef.current = [...arrowCoordinates];
     renderLines();
     setRenderTrigger((prev) => !prev);
-    setShowCanvasComponent(false);        
+    setShowCanvasComponent(false);
   };
 
-  return (  
-    <>
+  return (
+    <div className="flex mt-8">
       {showCanvasComponent ? (
-        <div >
-          <div className="row row-sm mb-4">
-          <div className="col col-sm-2">
-              <UserData/>
-              <div className="row">
-              <StudiesHistorial/>
-              </div>
+        <div className="flex mx-auto justify-center">
+          <div className="text-white w-1/4 p-2 text-center bg-canvas rounded-md my-2 mx-2">
+            <UserData />
+            <StudiesHistorial />
           </div>
-            <div className="col col-sm-6 text-center mt-2 mx-4 bg-dark">
-              <div className="card card-body text-center bg-dark text-white">
-                <WebcamComponent
-                  onCapture={handleCaptureImage}                  
-                />
-              </div>
+          <div className="w-2/3 text-center my-2 mx-2 p-2 rounded-md bg-canvas">
+            <div className="card card-body text-center bg-dark">
+              <WebcamComponent onCapture={handleCaptureImage} />
             </div>
-          </div>
-          </div>
-        
-      ) : (
-        <div >
-          <div className="row row-sm ">
-            <div className="col col-sm-2 ">
-              <div className="row">
-                <UserData/>
-              </div>
-              <div className="row">
-                <StudiesHistorial/>
-              </div>
-            </div>
-
-            <div className="col col-sm-6 mt-2 mx-4">
-            <div className="card-body bg-dark text-center text-white p-4 rounded">
-              <h2 className="text-center">Captured Image</h2>
-              <canvas
-                ref={canvasRef}
-                height={1024}                
-                width= {1220}
-                className="canvas-container mt-2"
-              ></canvas>
-            </div>
-            <ImgCapturedButtons               
-              handleReturnToCam = {handleReturnToCam}
-              handleSaveThumbnail = {handleSaveThumbnail}
-              handleClearLines = {handleClearLines}/>
-            </div>
-
-            
-              <div className="col col-md-3">
-              <CoordinatesList
-                lines={linesRef.current}
-                onDeleteArrow={handleDeleteArrow}
-                onArrowHover={handleArrowHover}
-                onArrowHoverOff={handleArrowHoverOff}
-              />
-              </div>
-            
-          
-            
-              <ClinicalPhotosList                
-                capturedImages = {capturedImages}                  
-                capturedArrowsSet = {capturedArrowsSet}
-                onDeleteImage={handleDeleteImage}
-                onRenderImage={handleRenderImage}
-              />
-            
-
           </div>
         </div>
-        
+      ) : (
+        <div className="flex justify-center">
+          <div className="text-white w-1/6 p-2 text-center rounded-md my-2 mx-2 bg-canvas">
+            <UserData />
+            <StudiesHistorial />
+          </div>
+
+          <div className="w-2/5 my-2 mx-2 p-2 rounded-md bg-canvas">
+            <div className="">
+              <h2 className="text-center text-white font-bold my-1">
+                Captured Image
+              </h2>
+              <canvas
+                ref={canvasRef}
+                height={1024}
+                width={1220}
+                className="canvas-container"
+              ></canvas>
+            </div>
+            <div className="mt-2">
+              <ImgCapturedButtons
+                handleReturnToCam={handleReturnToCam}
+                handleSaveThumbnail={handleSaveThumbnail}
+                handleClearLines={handleClearLines}
+              />
+            </div>
+          </div>
+
+          <div className="w-1/6 p-2 my-2 mx-1 rounded-md bg-canvas">
+            <CoordinatesList
+              lines={linesRef.current}
+              onDeleteArrow={handleDeleteArrow}
+              onArrowHover={handleArrowHover}
+              onArrowHoverOff={handleArrowHoverOff}
+            />
+          </div>
+
+          <div className="w-1/6 p-2 my-2 mx-1 rounded-md bg-canvas">
+            <ClinicalPhotosList
+              capturedImages={capturedImages}
+              capturedArrowsSet={capturedArrowsSet}
+              onDeleteImage={handleDeleteImage}
+              onRenderImage={handleRenderImage}
+            />
+          </div>
+        </div>
       )}
-    </>
+    </div>
   );
 };
 

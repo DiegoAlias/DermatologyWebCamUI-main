@@ -1,33 +1,37 @@
 // WebcamComponent.js
-import React, { useRef, useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCamera } from '@fortawesome/free-solid-svg-icons';
+import React, { useRef, useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCamera } from "@fortawesome/free-solid-svg-icons";
 
-import Webcam from 'react-webcam';
+import { FaCamera } from "react-icons/fa";
 
-const WebcamComponent = ({ onCapture, handleClearLines}) => {
+import Webcam from "react-webcam";
+
+const WebcamComponent = ({ onCapture, handleClearLines }) => {
   const webcamRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const startWebcam = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
         webcamRef.current.srcObject = stream;
-        setLoading(false)
+        setLoading(false);
       } catch (error) {
-        console.error('Error accessing webcam:', error);
+        console.error("Error accessing webcam:", error);
       }
     };
-    
+
     startWebcam();
 
     return () => {
       const stream = webcamRef.current?.srcObject;
       if (stream) {
         const tracks = stream.getTracks();
-        tracks.forEach(track => track.stop());
+        tracks.forEach((track) => track.stop());
       }
     };
   }, [webcamRef]);
@@ -40,30 +44,32 @@ const WebcamComponent = ({ onCapture, handleClearLines}) => {
   };
 
   return (
-    <div className='card-body mt-1'>
-      <h2>Live View</h2>
-          <Webcam
-            audio={false}
-            ref={webcamRef}
-            mirrored={true}
-            style={{ width: '100%', height: 'auto' }}
-          />
-          <div className="row">
-            <div className="col col-md-12 text-center">
-              {loading ? (
-                <p>Loading...</p>
-              ):(
-                <button
-                className="btn btn-lg btn-primary mt-2"
-                onClick={handleCapture}
-                disabled={loading}
-              >
-                <FontAwesomeIcon icon={faCamera} />
-              </button>  
-              )}
-              
-            </div>
-          </div>
+    <div className="card-body mt-1">
+      <h2 className="text-white my-2 font-bold">Live View</h2>
+      <Webcam
+        audio={false}
+        ref={webcamRef}
+        mirrored={true}
+        style={{ width: "100%", height: "auto" }}
+      />
+      <div className="row">
+        <div className="col col-md-12 text-center">
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <button
+              className="text-white mt-2"
+              onClick={handleCapture}
+              disabled={loading}
+            >
+              <FaCamera
+                className="bg-red-900 p-2 rounded-md hover:scale-125 w-9 h-9 my-1"
+                title="Capture"
+              />
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

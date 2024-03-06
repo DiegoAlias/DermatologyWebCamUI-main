@@ -1,8 +1,13 @@
 import ThumbnailComponent from "./ClinicalThumbnailPhoto.jsx";
 
-const ClinicalPhotosList = ({ capturedImages, capturedArrowsSet, onDeleteImage, onRenderImage  }) => {
+const ClinicalPhotosList = ({
+  capturedImages,
+  capturedArrowsSet,
+  onDeleteImage,
+  onRenderImage,
+}) => {
   return (
-    <div className="row mx-2">
+    <div className="row mx-2 overflow-y-auto max-h-[500px] max-w-full">
       {capturedImages.map((imageUrl, index) => (
         <div className="col col-sm-1 mt-2 text-center" key={index}>
           <div className="bg-dark p-1">
@@ -11,7 +16,7 @@ const ClinicalPhotosList = ({ capturedImages, capturedArrowsSet, onDeleteImage, 
               thumbnailUrl={imageUrl}
               capturedArrowsSet={capturedArrowsSet[index]}
               onDelete={() => onDeleteImage(index)}
-              onRenderImage = {onRenderImage}
+              onRenderImage={onRenderImage}
             />
           </div>
         </div>

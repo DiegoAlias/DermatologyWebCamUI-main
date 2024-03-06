@@ -1,6 +1,43 @@
+body {
+  background-image: url(./img/img-dermatology.jpg);
+  background-position: center;
+  background-size: cover;
+}
+
+
 /* Estilo CSS para hacer el canvas responsivo */
 .canvas-container {
-    width: 100%;
-    height: auto;
-  }
-  
+  width: 100%;
+  height: auto;
+}
+
+/* Estilos generales para la barra de desplazamiento */
+::-webkit-scrollbar {
+  width: 9px;
+  /* Ancho de la barra de desplazamiento en navegadores WebKit (Chrome, Safari, etc.) */
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar-thumb {
+  background-image: linear-gradient(to bottom, #6a62fd, #7c75ff, #8983fe, #9590fd, #a29efb, #afaafb, #bcb7fa, #c8c3fa, #ffffff);
+  scrollbar-color: #7a7a7a transparent;
+  /* Color del "pulgar" de la barra de desplazamiento */
+  border-radius: 10px;
+  /* Radio de borde del "pulgar" */
+  margin-right: 10px;
+}
+
+.bg-canvas {
+  background-color: rgba(51, 46, 75, 0.295);
+  backdrop-filter: blur(5px);
+  border: 1.5px solid #949494;
+}
+
+.bg-userdata {
+  color: rgb(36, 36, 36);
+  background-color: #fff8f871;
+  border-radius: 20px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  margin-bottom: 10px;
+}
