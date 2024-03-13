@@ -116,29 +116,26 @@ const CanvasComponent = ({ arrowColor }) => {
   };
 
   const handleMouseDown = (e) => {
-    isDrawing.current = true;
-    const rect = canvasRef.current.getBoundingClientRect(); // Obtén la posición del canvas en la página
+    const rect = canvasRef.current.getBoundingClientRect();
     const startPoint = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+      x: (e.clientX - rect.left) * (canvasRef.current.width / rect.width),
+      y: (e.clientY - rect.top) * (canvasRef.current.height / rect.height)
     };
+    isDrawing.current = true;
     linesRef.current.push({ startPoint, endPoint: startPoint });
-    setRenderTrigger((prev) => !prev);
   };
-
+  
   const handleMouseMove = (e) => {
     if (!isDrawing.current) return;
-
-    const rect = canvasRef.current.getBoundingClientRect(); // Obtén la posición del canvas en la página
+    const rect = canvasRef.current.getBoundingClientRect();
     const currentEndPoint = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+      x: (e.clientX - rect.left) * (canvasRef.current.width / rect.width),
+      y: (e.clientY - rect.top) * (canvasRef.current.height / rect.height)
     };
     linesRef.current[linesRef.current.length - 1].endPoint = currentEndPoint;
-
     renderLines();
   };
-
+  
   const handleMouseUp = () => {
     isDrawing.current = false;
   };
