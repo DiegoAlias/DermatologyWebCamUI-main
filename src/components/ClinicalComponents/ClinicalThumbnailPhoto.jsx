@@ -7,24 +7,24 @@ const ThumbnailComponent = ({
   capturedArrowsSet,
   onDelete,
   onRenderImage,
+  onShowDermatoscopicWebcam
 }) => {
   const canvasRef = useRef(null);
+  const arrowCoordinates = capturedArrowsSet;
 
   useEffect(() => {
-    // console.log(capturedArrowsSet)
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-
     // Limpiar el canvas antes de dibujar
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+    
     const img = new Image();
     img.src = thumbnailUrl;
-
+    
     img.onload = () => {
       // Dibujar la miniatura en el canvas
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
+      
       // Dibujar flechas basadas en las coordenadas
       capturedArrowsSet.forEach((arrow) => {
         const { startPoint, endPoint } = arrow;
@@ -71,7 +71,7 @@ const ThumbnailComponent = ({
       <div className="my-1 mx-1">
         <button
           className="mt-1 mx-1"
-          onClick={() => onRenderImage(thumbnailUrl, capturedArrowsSet)}
+          onClick={() => onRenderImage(thumbnailUrl)}
         >
           <FaSearch
             title="Search"
@@ -95,7 +95,8 @@ const ThumbnailComponent = ({
       ></canvas>
 
       <div className="mt-2 mx-1">
-        <button onClick={() => onRenderImage(thumbnailUrl)}>
+        <button onClick={() => {onRenderImage(thumbnailUrl, capturedArrowsSet)
+                                onShowDermatoscopicWebcam(true)}}>
           <FaMicroscope className="bg-blue-600 p-1.5 rounded-md hover:scale-125 w-6 h-6" />
         </button>
       </div>

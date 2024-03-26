@@ -4,11 +4,14 @@ import CoordinatesInput from "./ArrowsDescriptionInput.jsx";
 import { FaTrash, FaSearch } from "react-icons/fa";
 
 const CoordinatesList = ({
-  lines,
+  lines,  
+  onArrowDescriptions,
   onDeleteArrow,
   onArrowHover,
   onArrowHoverOff,
 }) => {
+
+  
   const [arrowDescriptions, setArrowDescriptions] = useState(
     new Array(lines.length).fill("")
   );
@@ -19,6 +22,7 @@ const CoordinatesList = ({
     const updatedArrowDescriptions = [...arrowDescriptions];
     updatedArrowDescriptions.splice(index, 1);
     setArrowDescriptions(updatedArrowDescriptions);
+    onArrowDescriptions(arrowDescriptions);
   };
 
   const handleLocateClick = (index) => {
@@ -34,6 +38,7 @@ const CoordinatesList = ({
     const updatedArrowDescriptions = [...arrowDescriptions];
     updatedArrowDescriptions[index] = description;
     setArrowDescriptions(updatedArrowDescriptions);
+    onArrowDescriptions(arrowDescriptions);
   };
 
   return (

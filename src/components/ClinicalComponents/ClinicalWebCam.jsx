@@ -1,11 +1,20 @@
 // WebcamComponent.js
 import React, { useRef, useEffect, useState } from "react";
-import { FaCamera } from "react-icons/fa";
 
 import Webcam from "react-webcam";
 import { Loader } from "./Loader";
+import { ClinicalWebCamButtons } from "./ClinicalWebCamButtons";
+import { DermatoscopicWebCamButtons } from "./DermatoscopicWebCamButtons";
 
-const WebcamComponent = ({ onCapture, handleClearLines }) => {
+const WebcamComponent = ({
+  capturedArrowsSet,
+  onArrowDescriptions,
+  onShowDermatoscopicWebcam,
+  handleShowDermatoscopicWebcam,
+  title = " Live View",
+  onCapture,
+  handleClearLines = () => {},
+}) => {
   const webcamRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -43,7 +52,7 @@ const WebcamComponent = ({ onCapture, handleClearLines }) => {
 
   return (
     <div className="card-body mt-1">
-      <h2 className="text-white my-2 font-bold">Live View</h2>
+      <h2 className="text-white my-2 font-bold">{title}</h2>
       <Webcam
         audio={false}
         ref={webcamRef}
@@ -54,17 +63,18 @@ const WebcamComponent = ({ onCapture, handleClearLines }) => {
         <div className="col col-md-12 text-center">
           {loading ? (
             <Loader />
+          ) : !onShowDermatoscopicWebcam ? (
+            <ClinicalWebCamButtons
+              handleCapture={handleCapture}
+              loading={loading}
+            />
           ) : (
-            <button
-              className="text-white mt-2"
-              onClick={handleCapture}
-              disabled={loading}
-            >
-              <FaCamera
-                className="bg-red-900 p-2 rounded-md hover:scale-125 w-9 h-9 my-1"
-                title="Capture"
-              />
-            </button>
+            <DermatoscopicWebCamButtons
+              handleShowDermatoscopicWebcam  = {handleShowDermatoscopicWebcam}
+              onShowDermatoscopicWebcam={onShowDermatoscopicWebcam}
+              capturedArrowsSet={capturedArrowsSet}
+              onArrowDescriptions={onArrowDescriptions}
+            />
           )}
         </div>
       </div>

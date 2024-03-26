@@ -1,4 +1,5 @@
 // CanvasComponent.js
+
 import { useEffect, useRef, useState } from "react";
 
 import ImgCapturedButtons from "./CapturedPhotoButtons.jsx";
@@ -6,7 +7,7 @@ import ClinicalPhotosList from "./ClinicalPhotosList.jsx";
 import UserData from "../User/UserData.jsx";
 import StudiesHistorial from "../User/StudiesHistorial.jsx";
 import CoordinatesList from "./ArrowsDescriptionList.jsx";
-import WebcamComponent from "./WebCam.jsx";
+import WebcamComponent from "./ClinicalWebCam.jsx";
 
 import "./Global.css";
 
@@ -18,13 +19,15 @@ const CanvasComponent = ({ arrowColor }) => {
   const isDrawing = useRef(false);
   const img = useRef(new Image());
   const [, setRenderTrigger] = useState(false);
+  const [lines, setLines] = useState([]); // Estado para almacenar las líneas
   const [savedArrowCoordinates, setSavedArrowCoordinates] = useState([]);
   const [hoveredArrowIndex, setHoveredArrowIndex] = useState(null);
   const [capturedImage, setCapturedImage] = useState(null);
   const [capturedImageThumbnail, setCapturedImageThumbnail] = useState(null);
   const [capturedImages, setCapturedImages] = useState([]);
   const [capturedArrowsSet, setCapturedArrowsSet] = useState([]);
-
+  const [showDermatoscopicWebcam, setShowDermatoscopicWebcam] = useState(false);
+  const [arrowDescriptions, setArrowDescriptions] = useState(null);
   const [showCanvasComponent, setShowCanvasComponent] = useState(true);
 
   useEffect(() => {
@@ -50,7 +53,7 @@ const CanvasComponent = ({ arrowColor }) => {
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [capturedImage, linesRef]);
+  }, [capturedImage, linesRef, showDermatoscopicWebcam]);
 
   const renderLines = () => {
     ctx.current.clearRect(
@@ -116,27 +119,26 @@ const CanvasComponent = ({ arrowColor }) => {
   };
 
   const handleMouseDown = (e) => {
-    isDrawing.current = true;
-    const rect = canvasRef.current.getBoundingClientRect(); // Obtén la posición del canvas en la página
+    const rect = canvasRef.current.getBoundingClientRect();
     const startPoint = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+      x: (e.clientX - rect.left) * (canvasRef.current.width / rect.width),
+      y: (e.clientY - rect.top) * (canvasRef.current.height / rect.height),
     };
+    isDrawing.current = true;
     linesRef.current.push({ startPoint, endPoint: startPoint });
-    setRenderTrigger((prev) => !prev);
+    setLines([...linesRef.current]);
   };
 
   const handleMouseMove = (e) => {
     if (!isDrawing.current) return;
-
-    const rect = canvasRef.current.getBoundingClientRect(); // Obtén la posición del canvas en la página
+    const rect = canvasRef.current.getBoundingClientRect();
     const currentEndPoint = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+      x: (e.clientX - rect.left) * (canvasRef.current.width / rect.width),
+      y: (e.clientY - rect.top) * (canvasRef.current.height / rect.height),
     };
     linesRef.current[linesRef.current.length - 1].endPoint = currentEndPoint;
-
     renderLines();
+    setLines([...linesRef.current]);
   };
 
   const handleMouseUp = () => {
@@ -216,12 +218,24 @@ const CanvasComponent = ({ arrowColor }) => {
   };
 
   const handleRenderImage = (thumbnailUrl, arrowCoordinates) => {
+    // console.log(arrowCoordinates)
     setCapturedImage(originalImg.current);
     linesRef.current = [...arrowCoordinates];
     renderLines();
     setRenderTrigger((prev) => !prev);
     setShowCanvasComponent(false);
   };
+
+  const onShowDermatoscopicWebcam = (state = true) => {
+    
+    setShowDermatoscopicWebcam(state);
+    
+    console.log(showDermatoscopicWebcam)
+  };
+
+  const handleArrowDescriptions = (description) => {
+     setArrowDescriptions({description}); 
+  }
 
   return (
     <div className="flex mt-8">
@@ -244,43 +258,76 @@ const CanvasComponent = ({ arrowColor }) => {
             <StudiesHistorial />
           </div>
 
-          <div className="w-2/5 my-2 mx-2 p-2 rounded-md bg-canvas">
-            <div className="">
-              <h2 className="text-center text-white font-bold my-1">
-                Captured Image
-              </h2>
-              <canvas
-                ref={canvasRef}
-                height={1024}
-                width={1220}
-                className="canvas-container"
-              ></canvas>
+          {!!showDermatoscopicWebcam && ( // Mostrar WebcamComponent si showDermatoscopicWebcam es verdadero
+            <div className="flex mx-auto justify-center">
+              <div className="w-2/8  text-center my-2 mx-1 p-1 rounded-md bg-canvas">
+                <div className="card card-body text-center bg-dark">
+                  <WebcamComponent                    
+                    capturedArrowsSet={capturedArrowsSet}
+                    onArrowDescriptions= {arrowDescriptions}
+                    onShowDermatoscopicWebcam={showDermatoscopicWebcam}
+                    handleShowDermatoscopicWebcam = {onShowDermatoscopicWebcam}
+                    title="Dermatoscopic Live View"
+                    onCapture={handleCaptureImage}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="mt-2">
-              <ImgCapturedButtons
-                handleReturnToCam={handleReturnToCam}
-                handleSaveThumbnail={handleSaveThumbnail}
-                handleClearLines={handleClearLines}
-              />
+          )}
+
+          <div className="flex justify-center">
+            <div
+              className={`${
+                showDermatoscopicWebcam ? "w-2/3" : "w-2/5"
+              }  my-2 mx-2 p-2 rounded-md bg-canvas`}
+            >
+              <div className="">
+                <h2 className="text-center text-white font-bold my-1">
+                  Captured Image
+                </h2>
+                <canvas
+                  ref={canvasRef}
+                  height={1024}
+                  width={1220}
+                  className="canvas-container"
+                ></canvas>
+              </div>
+              {!showDermatoscopicWebcam && (
+                <>
+                  <div className="mt-2">
+                    <ImgCapturedButtons
+                      handleReturnToCam={handleReturnToCam}
+                      handleSaveThumbnail={handleSaveThumbnail}
+                      handleClearLines={handleClearLines}
+                    />
+                  </div>
+                </>
+              )}
             </div>
-          </div>
 
-          <div className="w-1/6 p-2 my-2 mx-1 rounded-md bg-canvas">
-            <CoordinatesList
-              lines={linesRef.current}
-              onDeleteArrow={handleDeleteArrow}
-              onArrowHover={handleArrowHover}
-              onArrowHoverOff={handleArrowHoverOff}
-            />
-          </div>
+            {!showDermatoscopicWebcam && (
+              <>
+                <div className="w-1/6 p-2 my-2 mx-1 rounded-md bg-canvas">
+                  <CoordinatesList
+                    lines={linesRef.current}
+                    onArrowDescriptions ={handleArrowDescriptions}
+                    onDeleteArrow={handleDeleteArrow}
+                    onArrowHover={handleArrowHover}
+                    onArrowHoverOff={handleArrowHoverOff}
+                  />
+                </div>
 
-          <div className="w-1/6 p-2 my-2 mx-1 rounded-md bg-canvas">
-            <ClinicalPhotosList
-              capturedImages={capturedImages}
-              capturedArrowsSet={capturedArrowsSet}
-              onDeleteImage={handleDeleteImage}
-              onRenderImage={handleRenderImage}
-            />
+                <div className="w-1/6 p-2 my-2 mx-1 rounded-md bg-canvas">
+                  <ClinicalPhotosList
+                    capturedImages={capturedImages}
+                    capturedArrowsSet={capturedArrowsSet}
+                    onDeleteImage={handleDeleteImage}
+                    onRenderImage={handleRenderImage}
+                    onShowDermatoscopicWebcam={onShowDermatoscopicWebcam}
+                  />
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

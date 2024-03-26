@@ -5,6 +5,7 @@ const ClinicalPhotosList = ({
   capturedArrowsSet,
   onDeleteImage,
   onRenderImage,
+  onShowDermatoscopicWebcam
 }) => {
   return (
     <div className="row mx-2 overflow-y-auto max-h-[500px] max-w-full">
@@ -17,6 +18,7 @@ const ClinicalPhotosList = ({
               capturedArrowsSet={capturedArrowsSet[index]}
               onDelete={() => onDeleteImage(index)}
               onRenderImage={onRenderImage}
+              onShowDermatoscopicWebcam={onShowDermatoscopicWebcam}
             />
           </div>
         </div>
