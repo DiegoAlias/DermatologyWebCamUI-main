@@ -1,4 +1,19 @@
+import { useEffect, useState } from "react";
+import usePatientData from "../../store/patientData.js";
+
 const UserData = () => {
+  const [patientData, setPatientData] = useState({});
+
+  useEffect(() => {
+    const getPatientDataFromStore = () => {
+      const { patient } = usePatientData.getState();
+      return patient;
+    };
+    setPatientData(getPatientDataFromStore());
+  }, [patientData]);
+
+  const patientKeys = Object.keys(patientData);
+
   return (
     <div>
       <img
@@ -10,11 +25,11 @@ const UserData = () => {
         <div className="font-bold text-center mt-2 mb-2">Patient Data</div>
         <div className="">
           <ul className="">
-            <li>Name: Gabriel</li>
-            <li>Last Name: Alias</li>
-            <li>Age: 38</li>
-            <li>Birthday: 28/12/1985</li>
-            <li>DNI: 31949910</li>
+            {patientKeys.slice(1).map((attribute, i) => (
+              <li key = {i}>
+                {attribute}: {JSON.stringify(patientData[attribute])}
+              </li>
+            ))}
           </ul>
         </div>
       </div>

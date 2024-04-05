@@ -18,6 +18,7 @@ const WebcamComponent = ({
   const webcamRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const startWebcam = async () => {
@@ -29,6 +30,7 @@ const WebcamComponent = ({
         setLoading(false);
       } catch (error) {
         console.error("Error accessing webcam:", error);
+        setError("Error accessing webcam");
       }
     };
 
@@ -53,6 +55,7 @@ const WebcamComponent = ({
   return (
     <div className="card-body mt-1">
       <h2 className="text-white my-2 font-bold">{title}</h2>
+      {error && <p  > {error}</p>}
       <Webcam
         audio={false}
         ref={webcamRef}
@@ -61,8 +64,8 @@ const WebcamComponent = ({
       />
       <div className="row">
         <div className="col col-md-12 text-center">
-          {loading ? (
-            <Loader />
+          {loading ? ( 
+            !error && <Loader />
           ) : !onShowDermatoscopicWebcam ? (
             <ClinicalWebCamButtons
               handleCapture={handleCapture}

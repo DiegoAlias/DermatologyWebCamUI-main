@@ -1,14 +1,9 @@
-import { useEffect } from "react";
 import { FaSave } from "react-icons/fa";
 
 export const DermatoscopicWebCamButtons = ({handleShowDermatoscopicWebcam ,capturedArrowsSet, onArrowDescriptions, onShowDermatoscopicWebcam }) => {
-  useEffect(() => {
-    console.log({...capturedArrowsSet, onArrowDescriptions})
-  }, [])
-
+  
   const handleReturnToClinical = ()=>{
-    handleShowDermatoscopicWebcam(false);
-    
+    handleShowDermatoscopicWebcam(false);    
   }
   
   return (

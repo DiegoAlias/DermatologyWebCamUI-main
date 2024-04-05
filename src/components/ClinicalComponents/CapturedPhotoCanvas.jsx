@@ -5,11 +5,15 @@ import { useEffect, useRef, useState } from "react";
 import ImgCapturedButtons from "./CapturedPhotoButtons.jsx";
 import ClinicalPhotosList from "./ClinicalPhotosList.jsx";
 import UserData from "../User/UserData.jsx";
-import StudiesHistorial from "../User/StudiesHistorial.jsx";
+import CurrentStudy from "../User/CurrentStudy.jsx";
 import CoordinatesList from "./ArrowsDescriptionList.jsx";
-import WebcamComponent from "./ClinicalWebCam.jsx";
+import WebcamComponent from "./WebCam.jsx";
 
 import "./Global.css";
+import { useArrowCoordinates } from "../../store/arrowCoordinates.js";
+import { useArrowDescriptions } from "../../store/arrowDescriptions.js";
+import { useClinicalImage } from "../../store/clinicalImages.js";
+import { useDermatoscopicImage } from "../../store/dermatoscopicImages.js";
 
 const CanvasComponent = ({ arrowColor }) => {
   const originalImg = useRef(null);
@@ -172,11 +176,11 @@ const CanvasComponent = ({ arrowColor }) => {
   const handleCaptureImage = (imgSrc) => {
     originalImg.current = imgSrc;
     // setCapturedImage('/img/descarga.jpg');
-    setCapturedImage(imgSrc);
+    setCapturedImage(imgSrc);  
     setShowCanvasComponent(false);
   };
 
-  const handleReturnToCam = () => {
+  const handleReturnToCam = () => {    
     linesRef.current = [];
     renderLines();
     setRenderTrigger((prev) => !prev);
@@ -217,9 +221,8 @@ const CanvasComponent = ({ arrowColor }) => {
     setCapturedArrowsSet(updatedArrowsSet);
   };
 
-  const handleRenderImage = (thumbnailUrl, arrowCoordinates) => {
-    // console.log(arrowCoordinates)
-    setCapturedImage(originalImg.current);
+  const handleRenderImage = (thumbnailUrl, arrowCoordinates) => {       
+    setCapturedImage(thumbnailUrl);
     linesRef.current = [...arrowCoordinates];
     renderLines();
     setRenderTrigger((prev) => !prev);
@@ -228,13 +231,27 @@ const CanvasComponent = ({ arrowColor }) => {
 
   const onShowDermatoscopicWebcam = (state = true) => {
     
-    setShowDermatoscopicWebcam(state);
-    
-    console.log(showDermatoscopicWebcam)
+    useClinicalImage.getState().addClinicalImage({capturedImage});
+    useArrowCoordinates.getState().addArrowCoordinates(linesRef.current); 
+    if (!state){
+      useDermatoscopicImage.getState().addDermatoscopicImage({capturedImage});    
+      console.log(
+            "Current state:",
+            useArrowCoordinates.getState(),    
+            useArrowDescriptions.getState(), 
+            useClinicalImage.getState(),  
+            useDermatoscopicImage.getState(),
+          );
+      const { ClinicalImage } =  useClinicalImage.getState()    
+      const { DermatoscopicImage } =  useDermatoscopicImage.getState()
+      console.log(DermatoscopicImage.capturedImage === ClinicalImage.capturedImage)
+    }   
+    setShowDermatoscopicWebcam(state);       
   };
 
-  const handleArrowDescriptions = (description) => {
-     setArrowDescriptions({description}); 
+  const handleArrowDescriptions = (description) => {    
+    setArrowDescriptions({description}); 
+    useArrowDescriptions.getState().addArrowDescriptions({description});      
   }
 
   return (
@@ -243,7 +260,7 @@ const CanvasComponent = ({ arrowColor }) => {
         <div className="flex mx-auto justify-center">
           <div className="text-white w-1/4 p-2 text-center bg-canvas rounded-md my-2 mx-2">
             <UserData />
-            <StudiesHistorial />
+            <CurrentStudy />
           </div>
           <div className="w-2/3 text-center my-2 mx-2 p-2 rounded-md bg-canvas">
             <div className="card card-body text-center bg-dark">
@@ -252,10 +269,11 @@ const CanvasComponent = ({ arrowColor }) => {
           </div>
         </div>
       ) : (
+        //DERMATOSCOPIC VIEW
         <div className="flex justify-center">
           <div className="text-white w-1/6 p-2 text-center rounded-md my-2 mx-2 bg-canvas">
             <UserData />
-            <StudiesHistorial />
+            <CurrentStudy />
           </div>
 
           {!!showDermatoscopicWebcam && ( // Mostrar WebcamComponent si showDermatoscopicWebcam es verdadero

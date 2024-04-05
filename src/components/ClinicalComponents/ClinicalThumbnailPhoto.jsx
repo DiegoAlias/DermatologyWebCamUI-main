@@ -71,7 +71,7 @@ const ThumbnailComponent = ({
       <div className="my-1 mx-1">
         <button
           className="mt-1 mx-1"
-          onClick={() => onRenderImage(thumbnailUrl)}
+          onClick={() => onRenderImage(thumbnailUrl, arrowCoordinates)}
         >
           <FaSearch
             title="Search"
@@ -95,7 +95,7 @@ const ThumbnailComponent = ({
       ></canvas>
 
       <div className="mt-2 mx-1">
-        <button onClick={() => {onRenderImage(thumbnailUrl, capturedArrowsSet)
+        <button onClick={() => {onRenderImage(thumbnailUrl, arrowCoordinates)
                                 onShowDermatoscopicWebcam(true)}}>
           <FaMicroscope className="bg-blue-600 p-1.5 rounded-md hover:scale-125 w-6 h-6" />
         </button>

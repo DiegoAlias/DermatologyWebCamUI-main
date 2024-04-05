@@ -1,4 +1,6 @@
+
 const CoordinatesInput = ({ description, onDescriptionChange }) => {
+
   return (
     <div>
       <div className="text-black">
@@ -7,7 +9,8 @@ const CoordinatesInput = ({ description, onDescriptionChange }) => {
           className="rounded-md px-2 w-44"
           placeholder="Input a arrow description"
           value={description}
-          onChange={(e) => onDescriptionChange(e.target.value)}
+          onChange={(e) => 
+            onDescriptionChange(e.target.value)}        
         />
       </div>
     </div>

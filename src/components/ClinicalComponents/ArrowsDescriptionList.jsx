@@ -37,8 +37,8 @@ const CoordinatesList = ({
     // Actualiza el estado del texto de la flecha
     const updatedArrowDescriptions = [...arrowDescriptions];
     updatedArrowDescriptions[index] = description;
-    setArrowDescriptions(updatedArrowDescriptions);
-    onArrowDescriptions(arrowDescriptions);
+    setArrowDescriptions(updatedArrowDescriptions);    
+    onArrowDescriptions(description);
   };
 
   return (
