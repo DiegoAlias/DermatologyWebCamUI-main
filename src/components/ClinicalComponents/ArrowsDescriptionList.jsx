@@ -17,8 +17,7 @@ const CoordinatesList = ({
   );
 
   const handleArrowClick = (index) => {
-    onDeleteArrow(index);
-    // Al borrar una flecha, también borra el texto asociado
+    onDeleteArrow(index);    
     const updatedArrowDescriptions = [...arrowDescriptions];
     updatedArrowDescriptions.splice(index, 1);
     setArrowDescriptions(updatedArrowDescriptions);
@@ -33,12 +32,12 @@ const CoordinatesList = ({
     onArrowHoverOff();
   };
 
-  const handleDescriptionChange = (index, description) => {
-    // Actualiza el estado del texto de la flecha
+  const handleDescriptionChange = (index, description) => {    
     const updatedArrowDescriptions = [...arrowDescriptions];
     updatedArrowDescriptions[index] = description;
+    // console.log(updatedArrowDescriptions)
     setArrowDescriptions(updatedArrowDescriptions);    
-    onArrowDescriptions(description);
+    onArrowDescriptions(updatedArrowDescriptions);
   };
 
   return (
@@ -46,7 +45,7 @@ const CoordinatesList = ({
       <div className="text-white text-center">
         <div className="mt-2">
           {" "}
-          <h4 className="font-bold">Arrows List</h4>{" "}
+          <h4 className="font-bold">Descriptions List</h4>{" "}
         </div>
         <ul className="list-group list-group-flush bg-dark">
           {lines.map((line, index) => (

@@ -67,7 +67,7 @@ const ThumbnailComponent = ({
 
   return (
     <div className="text-white">
-      <h4 className="font-bold">Arrows List</h4>
+      
       <div className="my-1 mx-1">
         <button
           className="mt-1 mx-1"

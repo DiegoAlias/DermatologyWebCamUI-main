@@ -10,10 +10,17 @@ import CoordinatesList from "./ArrowsDescriptionList.jsx";
 import WebcamComponent from "./WebCam.jsx";
 
 import "./Global.css";
+
+import { drawArrowsOnImage } from '../../handlers/canvasHandlers.js'
+
 import { useArrowCoordinates } from "../../store/arrowCoordinates.js";
 import { useArrowDescriptions } from "../../store/arrowDescriptions.js";
 import { useClinicalImage } from "../../store/clinicalImages.js";
 import { useDermatoscopicImage } from "../../store/dermatoscopicImages.js";
+import usePatientData from "../../store/patientData.js";
+import useStudyData from "../../store/studyData.js";
+
+
 
 const CanvasComponent = ({ arrowColor }) => {
   const originalImg = useRef(null);
@@ -226,32 +233,42 @@ const CanvasComponent = ({ arrowColor }) => {
     linesRef.current = [...arrowCoordinates];
     renderLines();
     setRenderTrigger((prev) => !prev);
+
     setShowCanvasComponent(false);
   };
 
-  const onShowDermatoscopicWebcam = (state = true) => {
+  const onShowDermatoscopicWebcam = (clinicalMode = true) => {
     
-    useClinicalImage.getState().addClinicalImage({capturedImage});
-    useArrowCoordinates.getState().addArrowCoordinates(linesRef.current); 
-    if (!state){
-      useDermatoscopicImage.getState().addDermatoscopicImage({capturedImage});    
+    useClinicalImage.getState().addClinicalImage({capturedImage});    
+    useArrowCoordinates.getState().addArrowCoordinates(linesRef); 
+    
+    if (!clinicalMode){
+
+      const jpgImage = drawArrowsOnImage(img.current, linesRef.current);
+      
+      useDermatoscopicImage.getState().addDermatoscopicImage({jpgImage});    
+      
       console.log(
-            "Current state:",
+            "Current study:",
+            usePatientData.getState(),
+            useStudyData.getState(),
             useArrowCoordinates.getState(),    
             useArrowDescriptions.getState(), 
             useClinicalImage.getState(),  
             useDermatoscopicImage.getState(),
-          );
-      const { ClinicalImage } =  useClinicalImage.getState()    
-      const { DermatoscopicImage } =  useDermatoscopicImage.getState()
-      console.log(DermatoscopicImage.capturedImage === ClinicalImage.capturedImage)
+          );     
     }   
-    setShowDermatoscopicWebcam(state);       
+    setShowDermatoscopicWebcam(clinicalMode);       
   };
 
-  const handleArrowDescriptions = (description) => {    
-    setArrowDescriptions({description}); 
-    useArrowDescriptions.getState().addArrowDescriptions({description});      
+  const onShowClinicalWebcam = (clinicalMode = true) => {    
+    setShowDermatoscopicWebcam(clinicalMode);       
+  };
+
+
+  const handleArrowDescriptions = (descriptions) => {        
+    setArrowDescriptions({descriptions}); 
+    useArrowDescriptions.getState().addArrowDescriptions({descriptions});      
   }
 
   return (
@@ -284,6 +301,7 @@ const CanvasComponent = ({ arrowColor }) => {
                     capturedArrowsSet={capturedArrowsSet}
                     onArrowDescriptions= {arrowDescriptions}
                     onShowDermatoscopicWebcam={showDermatoscopicWebcam}
+                    handleShowClinicalWebcam= {onShowClinicalWebcam}
                     handleShowDermatoscopicWebcam = {onShowDermatoscopicWebcam}
                     title="Dermatoscopic Live View"
                     onCapture={handleCaptureImage}

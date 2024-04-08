@@ -10,6 +10,7 @@ const WebcamComponent = ({
   capturedArrowsSet,
   onArrowDescriptions,
   onShowDermatoscopicWebcam,
+  handleShowClinicalWebcam,
   handleShowDermatoscopicWebcam,
   title = " Live View",
   onCapture,
@@ -74,6 +75,7 @@ const WebcamComponent = ({
           ) : (
             <DermatoscopicWebCamButtons
               handleShowDermatoscopicWebcam  = {handleShowDermatoscopicWebcam}
+              handleShowClinicalWebcam = {handleShowClinicalWebcam}
               onShowDermatoscopicWebcam={onShowDermatoscopicWebcam}
               capturedArrowsSet={capturedArrowsSet}
               onArrowDescriptions={onArrowDescriptions}

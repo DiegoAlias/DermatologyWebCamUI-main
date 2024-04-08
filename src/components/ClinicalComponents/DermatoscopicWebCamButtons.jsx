@@ -1,9 +1,16 @@
-import { FaSave } from "react-icons/fa";
+import { FaSave, FaRedo } from "react-icons/fa";
 
-export const DermatoscopicWebCamButtons = ({handleShowDermatoscopicWebcam ,capturedArrowsSet, onArrowDescriptions, onShowDermatoscopicWebcam }) => {
+export const DermatoscopicWebCamButtons = (
+  {handleShowDermatoscopicWebcam ,
+    handleShowClinicalWebcam    
+  }) => {
   
   const handleReturnToClinical = ()=>{
     handleShowDermatoscopicWebcam(false);    
+  }
+
+  const handleReturnTocleanClinical = ()=>{
+    handleShowClinicalWebcam(false);    
   }
   
   return (
@@ -14,7 +21,16 @@ export const DermatoscopicWebCamButtons = ({handleShowDermatoscopicWebcam ,captu
         <FaSave
           onClick={handleReturnToClinical}
           className="bg-red-900 p-2 rounded-md hover:scale-125 w-9 h-9 my-1"
-          title="Capture"
+          title="Save"
+        />
+      </button>
+      <button
+        className="text-white mt-2"
+      >
+        <FaRedo          
+          onClick={handleReturnTocleanClinical}
+          className="bg-red-900 p-2 rounded-md hover:scale-125 w-9 h-9 my-1 mx-2"
+          title="Back"
         />
       </button>
     </div>
