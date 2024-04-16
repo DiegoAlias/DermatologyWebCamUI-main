@@ -180,10 +180,8 @@ const CanvasComponent = ({ arrowColor }) => {
     renderLines();
   };
 
-  const handleCaptureImage = (imgSrc) => {
-    // console.log('imageSrc: ' +  imgSrc)
-    originalImg.current = imgSrc;
-    // setCapturedImage('/img/descarga.jpg');
+  const handleCaptureImage = (imgSrc) => {    
+    originalImg.current = imgSrc;    
     setCapturedImage(imgSrc);  
     setShowCanvasComponent(false);
   };

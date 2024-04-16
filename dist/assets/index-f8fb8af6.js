@@ -9397,7 +9397,7 @@ const xp = ({
       children: [
         S.jsx("h4", {
           className: "font-bold text-white text-center mt-4",
-          children: "Arrows List",
+          children: "Clinical Photos",
         }),
         " ",
         e.map((o, i) =>
@@ -10241,66 +10241,68 @@ const bp = li(qp),
     });
   },
   ms = ({
-    capturedArrowsSet: e,
-    onArrowDescriptions: t,
-    onShowDermatoscopicWebcam: n,
-    handleShowClinicalWebcam: r,
-    handleShowDermatoscopicWebcam: l,
-    title: o = " Live View",
-    onCapture: i,
-    handleClearLines: u = () => {},
+    onShowDermatoscopicWebcam: e,
+    handleShowClinicalWebcam: t,
+    handleShowDermatoscopicWebcam: n,
+    title: r = "Live View",
+    onCapture: l,
+    handleClearLines: o = () => {},
   }) => {
-    const s = M.useRef(null),
-      [d, y] = M.useState(!0),
-      [v, p] = M.useState(null);
+    const i = M.useRef(null),
+      [u, s] = M.useState(!0),
+      [d, y] = M.useState(null);
     M.useEffect(
       () => (
         (async () => {
           try {
-            const h = await navigator.mediaDevices.getUserMedia({ video: !0 });
-            (s.current.srcObject = h), y(!1);
-          } catch (h) {
-            console.error("Error accessing webcam:", h),
-              p("Error accessing webcam");
+            const g = await navigator.mediaDevices.getUserMedia({
+              video: { width: 1220, height: 1024 },
+            });
+            (i.current.srcObject = g), s(!1);
+          } catch (g) {
+            console.error("Error accessing webcam:", g),
+              y("Error accessing webcam");
           }
         })(),
         () => {
-          var N;
-          const h = (N = s.current) == null ? void 0 : N.srcObject;
-          h && h.getTracks().forEach((a) => a.stop());
+          var m;
+          const g = (m = i.current) == null ? void 0 : m.srcObject;
+          g && g.getTracks().forEach((N) => N.stop());
         }
       ),
-      [s]
+      [i]
     );
-    const g = () => {
-      const m = s.current.getScreenshot();
-      i(m), u();
+    const v = () => {
+      const p = i.current.getScreenshot("image/png");
+      l(p), o();
     };
     return S.jsxs("div", {
       className: "card-body mt-1",
       children: [
-        S.jsx("h2", { className: "text-white my-2 font-bold", children: o }),
-        v && S.jsxs("p", { children: [" ", v] }),
+        S.jsx("h2", { className: "text-white my-2 font-bold", children: r }),
+        d && S.jsx("p", { children: d }),
         S.jsx(bp, {
           audio: !1,
-          ref: s,
+          ref: i,
           mirrored: !0,
           style: { width: "100%", height: "auto" },
+          screenshotFormat: "image/png",
+          videoConstraints: { width: 1220, height: 1024 },
         }),
         S.jsx("div", {
           className: "row",
           children: S.jsx("div", {
             className: "col col-md-12 text-center",
-            children: d
-              ? !v && S.jsx(em, {})
-              : n
+            children: u
+              ? !d && S.jsx(em, {})
+              : e
               ? S.jsx(nm, {
-                  handleShowDermatoscopicWebcam: l,
-                  handleShowClinicalWebcam: r,
-                  onShowDermatoscopicWebcam: n,
-                  handleCapture: g,
+                  handleShowDermatoscopicWebcam: n,
+                  handleShowClinicalWebcam: t,
+                  onShowDermatoscopicWebcam: e,
+                  handleCapture: v,
                 })
-              : S.jsx(tm, { handleCapture: g, loading: d }),
+              : S.jsx(tm, { handleCapture: v, loading: u }),
           }),
         }),
       ],
