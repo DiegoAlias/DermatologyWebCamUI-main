@@ -1,13 +1,11 @@
 import { create } from "zustand";
 
-const usePatientData = create((set) => ({
-    patient: {},
+export const usePatientData = create((set) => ({
+    PatientData: {},
 
     addPatient: (patientData) =>
-        set((state) => ({ patient: { ...state.patient, ...patientData } })),
+        set((state) => ({ PatientData: { ...state.addPatient, ...patientData } })),
 
-    getState: () => ({patient: usePatientData.getState().patient}),
+    getState: () => ({PatientData: usePatientData.getState().PatientData}),
 
 }));
-
-export default usePatientData;

@@ -2,23 +2,23 @@
 
 import { useEffect, useRef, useState } from "react";
 
+//Components
 import ImgCapturedButtons from "./CapturedPhotoButtons.jsx";
 import ClinicalPhotosList from "./ClinicalPhotosList.jsx";
-import UserData from "../User/UserData.jsx";
-import CurrentStudy from "../User/CurrentStudy.jsx";
+import RawPatientData from "../User/RawPatientData.jsx";
+// import CurrentStudy from "../User/CurrentStudy.jsx";
 import CoordinatesList from "./ArrowsDescriptionList.jsx";
 import WebcamComponent from "./WebCam.jsx";
 
 import "./Global.css";
 
-import { drawArrowsOnImage } from '../../handlers/canvasHandlers.js'
-
+//Storing
 import { useArrowCoordinates } from "../../store/arrowCoordinates.js";
 import { useArrowDescriptions } from "../../store/arrowDescriptions.js";
 import { useClinicalImage } from "../../store/clinicalImages.js";
 import { useDermatoscopicImage } from "../../store/dermatoscopicImages.js";
-import usePatientData from "../../store/patientData.js";
-import useStudyData from "../../store/studyData.js";
+import { usePatientData } from "../../store/patientData.js";
+import { useStudyData } from "../../store/studyData.js";
 
 
 
@@ -181,6 +181,7 @@ const CanvasComponent = ({ arrowColor }) => {
   };
 
   const handleCaptureImage = (imgSrc) => {
+    // console.log('imageSrc: ' +  imgSrc)
     originalImg.current = imgSrc;
     // setCapturedImage('/img/descarga.jpg');
     setCapturedImage(imgSrc);  
@@ -237,34 +238,39 @@ const CanvasComponent = ({ arrowColor }) => {
     setShowCanvasComponent(false);
   };
 
-  const onShowDermatoscopicWebcam = (clinicalMode = true) => {
+  const onShowDermatoscopicWebcam = (clinicalMode = true ) => {
     
-    useClinicalImage.getState().addClinicalImage({capturedImage});    
+    
+    useClinicalImage.getState().addClinicalImage({current: img.current.src});    
+
     useArrowCoordinates.getState().addArrowCoordinates(linesRef); 
     
     if (!clinicalMode){
+      
+      useDermatoscopicImage.getState().addDermatoscopicImage({current:  originalImg.current});    
+      
+      window.currentStudy = {
+            PatientData: usePatientData.getState().PatientData.current,
+            StudyData: useStudyData.getState().StudyData.current,
+            ArrowCoordinates: useArrowCoordinates.getState().ArrowCoordinates.current, 
+            ArrowDescriptions: useArrowDescriptions.getState().ArrowDescriptions.current, 
+            ClinicalImage: useClinicalImage.getState().ClinicalImage.current, 
+            DermatoscopicImage: useDermatoscopicImage.getState().DermatoscopicImage.current,
+            AppVisibiltyState: ()=>{
+              document.getElementById('root').hidden = true
+              return {
+                status : true
+              }
+            }
+      }        
 
-      const jpgImage = drawArrowsOnImage(img.current, linesRef.current);
       
-      useDermatoscopicImage.getState().addDermatoscopicImage({jpgImage});    
-      
-      console.log(
-            "Current study:",
-            usePatientData.getState(),
-            useStudyData.getState(),
-            useArrowCoordinates.getState(),    
-            useArrowDescriptions.getState(), 
-            useClinicalImage.getState(),  
-            useDermatoscopicImage.getState(),
-          );     
+
     }   
-    setShowDermatoscopicWebcam(clinicalMode);       
+    setShowDermatoscopicWebcam(clinicalMode);   
   };
 
-  const onShowClinicalWebcam = (clinicalMode = true) => {    
-    setShowDermatoscopicWebcam(clinicalMode);       
-  };
-
+  const onShowClinicalWebcam = (clinicalMode = true) => setShowDermatoscopicWebcam(clinicalMode);       
 
   const handleArrowDescriptions = (descriptions) => {        
     setArrowDescriptions({descriptions}); 
@@ -276,8 +282,8 @@ const CanvasComponent = ({ arrowColor }) => {
       {showCanvasComponent ? (
         <div className="flex mx-auto justify-center">
           <div className="text-white w-1/4 p-2 text-center bg-canvas rounded-md my-2 mx-2">
-            <UserData />
-            <CurrentStudy />
+            <RawPatientData />
+            {/* <CurrentStudy /> */}
           </div>
           <div className="w-2/3 text-center my-2 mx-2 p-2 rounded-md bg-canvas">
             <div className="card card-body text-center bg-dark">
@@ -289,8 +295,8 @@ const CanvasComponent = ({ arrowColor }) => {
         //DERMATOSCOPIC VIEW
         <div className="flex justify-center">
           <div className="text-white w-1/6 p-2 text-center rounded-md my-2 mx-2 bg-canvas">
-            <UserData />
-            <CurrentStudy />
+            <RawPatientData />
+            {/* <CurrentStudy /> */}
           </div>
 
           {!!showDermatoscopicWebcam && ( // Mostrar WebcamComponent si showDermatoscopicWebcam es verdadero

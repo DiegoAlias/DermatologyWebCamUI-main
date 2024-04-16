@@ -1,11 +1,14 @@
 import { FaSave, FaRedo } from "react-icons/fa";
 
 export const DermatoscopicWebCamButtons = (
-  {handleShowDermatoscopicWebcam ,
-    handleShowClinicalWebcam    
+  {
+    handleShowDermatoscopicWebcam ,
+    handleShowClinicalWebcam,
+    handleCapture    
   }) => {
   
-  const handleReturnToClinical = ()=>{
+  const handleReturnToClinical = ()=>{ 
+    handleCapture();   
     handleShowDermatoscopicWebcam(false);    
   }
 

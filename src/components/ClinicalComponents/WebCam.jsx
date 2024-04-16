@@ -17,7 +17,7 @@ const WebcamComponent = ({
   handleClearLines = () => {},
 }) => {
   const webcamRef = useRef(null);
-  const [capturedImage, setCapturedImage] = useState(null);
+  // const [capturedImage, setCapturedImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -47,9 +47,9 @@ const WebcamComponent = ({
   }, [webcamRef]);
 
   const handleCapture = () => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    setCapturedImage(imageSrc);
-    onCapture(imageSrc); // Envia la imagen capturada al componente padre
+    const imageSrc = webcamRef.current.getScreenshot();    
+    // setCapturedImage(imageSrc);
+    onCapture(imageSrc); 
     handleClearLines();
   };
 
@@ -77,8 +77,9 @@ const WebcamComponent = ({
               handleShowDermatoscopicWebcam  = {handleShowDermatoscopicWebcam}
               handleShowClinicalWebcam = {handleShowClinicalWebcam}
               onShowDermatoscopicWebcam={onShowDermatoscopicWebcam}
-              capturedArrowsSet={capturedArrowsSet}
-              onArrowDescriptions={onArrowDescriptions}
+              handleCapture={handleCapture}
+              // capturedArrowsSet={capturedArrowsSet}
+              // onArrowDescriptions={onArrowDescriptions}
             />
           )}
         </div>

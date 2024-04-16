@@ -1,12 +1,11 @@
 import { create } from "zustand";
 
-const useStudyData = create((set) => ({
-  study: {},
+export const useStudyData = create((set) => ({
+  StudyData: {},
   
   addStudy: (studyData) =>
-    set((state) => ({ study: { ...state.study, ...studyData } })),
+    set((state) => ({ study: { ...state.addStudy, ...studyData } })),
 
-  getState: () => ({ study: useStudyData.getState().study }),
+  getState: () => ({ StudyData: useStudyData.getState().StudyData }),
 }));
 
-export default useStudyData;
