@@ -1,7 +1,6 @@
 import React from "react";
 
-import CanvasComponent from "./components/ClinicalComponents/CapturedPhotoCanvas.jsx";
-
+import CanvasComponent from "./components/NewStudy/CapturedPhotoCanvas.jsx";
 
 const App = () => {
   return (

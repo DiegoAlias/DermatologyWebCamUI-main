@@ -34,8 +34,7 @@ const CoordinatesList = ({
 
   const handleDescriptionChange = (index, description) => {    
     const updatedArrowDescriptions = [...arrowDescriptions];
-    updatedArrowDescriptions[index] = description;
-    // console.log(updatedArrowDescriptions)
+    updatedArrowDescriptions[index] = description;    
     setArrowDescriptions(updatedArrowDescriptions);    
     onArrowDescriptions(updatedArrowDescriptions);
   };

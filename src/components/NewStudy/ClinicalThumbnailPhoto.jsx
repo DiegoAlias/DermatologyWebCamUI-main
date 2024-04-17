@@ -72,15 +72,20 @@ const ThumbnailComponent = ({
         <button
           className="mt-1 mx-1"
           onClick={() => onRenderImage(thumbnailUrl, arrowCoordinates)}
+          title="Find Image"
         >
           <FaSearch
-            title="Search"
+            title="Find Image"
             className=" bg-blue-600 p-1.5 rounded-md hover:scale-125 w-6 h-6"
           />
         </button>
-        <button className="mt-1 mx-1" onClick={onDelete}>
+        <button 
+          className="mt-1 mx-1" 
+          onClick={onDelete}
+          title="Delete Image"
+          >
           <FaTrash
-            title="Trash"
+            title="Delete Image"
             className="bg-blue-600 p-1.5 rounded-md hover:scale-125 w-6 h-6"
           />
         </button>
@@ -96,8 +101,13 @@ const ThumbnailComponent = ({
 
       <div className="mt-2 mx-1">
         <button onClick={() => {onRenderImage(thumbnailUrl, arrowCoordinates)
-                                onShowDermatoscopicWebcam(true)}}>
-          <FaMicroscope className="bg-blue-600 p-1.5 rounded-md hover:scale-125 w-6 h-6" />
+                                onShowDermatoscopicWebcam(true)}}
+                title="Dermatoscopic"
+                >
+          <FaMicroscope 
+            className="bg-blue-600 p-1.5 rounded-md hover:scale-125 w-6 h-6" 
+            title="Dermatoscopic"
+          />
         </button>
       </div>
     </div>

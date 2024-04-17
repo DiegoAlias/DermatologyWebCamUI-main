@@ -9,8 +9,7 @@ const RawPatientData = () => {
       const { patient } = window;
 
       if (patient) {
-        usePatientData.getState().addPatient({current: patient});
-        console.log(usePatientData.getState().PatientData)
+        usePatientData.getState().addPatient({current: patient});        
       }
       return patient;
     };

@@ -7,6 +7,7 @@ export const ClinicalWebCamButtons = ({handleCapture ,loading }) => {
         className="text-white mt-2"
         onClick={handleCapture}
         disabled={loading}
+        title="Capture"
       >
         <FaCamera
           className="bg-red-900 p-2 rounded-md hover:scale-125 w-9 h-9 my-1"

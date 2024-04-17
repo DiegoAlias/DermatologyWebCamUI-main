@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from "react";
 //Components
 import ImgCapturedButtons from "./CapturedPhotoButtons.jsx";
 import ClinicalPhotosList from "./ClinicalPhotosList.jsx";
-import RawPatientData from "../User/RawPatientData.jsx";
-// import CurrentStudy from "../User/CurrentStudy.jsx";
+import RawPatientData from "../Patient/RawPatientData.jsx";
+// import CurrentStudy from "../Patient/CurrentStudy.jsx";
 import CoordinatesList from "./ArrowsDescriptionList.jsx";
 import WebcamComponent from "./WebCam.jsx";
 
@@ -246,7 +246,7 @@ const CanvasComponent = ({ arrowColor }) => {
     if (!clinicalMode){
       
       useDermatoscopicImage.getState().addDermatoscopicImage({current:  originalImg.current});    
-      
+
       window.currentStudy = {
             PatientData: usePatientData.getState().PatientData.current,
             StudyData: useStudyData.getState().StudyData.current,
@@ -270,9 +270,9 @@ const CanvasComponent = ({ arrowColor }) => {
 
   const onShowClinicalWebcam = (clinicalMode = true) => setShowDermatoscopicWebcam(clinicalMode);       
 
-  const handleArrowDescriptions = (descriptions) => {        
+  const handleArrowDescriptions = (descriptions) => {    
     setArrowDescriptions({descriptions}); 
-    useArrowDescriptions.getState().addArrowDescriptions({descriptions});      
+    useArrowDescriptions.getState().addArrowDescriptions({current: descriptions});      
   }
 
   return (

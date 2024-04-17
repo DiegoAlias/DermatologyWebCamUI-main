@@ -24,7 +24,7 @@ export const DermatoscopicWebCamButtons = (
         <FaSave
           onClick={handleReturnToClinical}
           className="bg-red-900 p-2 rounded-md hover:scale-125 w-9 h-9 my-1"
-          title="Save"
+          title="Save Image"
         />
       </button>
       <button

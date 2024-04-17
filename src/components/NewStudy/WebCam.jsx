@@ -8,7 +8,7 @@ const WebcamComponent = ({
     onShowDermatoscopicWebcam,
     handleShowClinicalWebcam,
     handleShowDermatoscopicWebcam,
-    title = "Live View",
+    title = "Clinical View",
     onCapture,
     handleClearLines = () => {},
 }) => {
