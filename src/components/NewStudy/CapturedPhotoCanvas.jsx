@@ -18,7 +18,7 @@ import { useDermatoscopicImage } from "../../store/dermatoscopicImages.js";
 import { usePatientData } from "../../store/patientData.js";
 import { useStudyData } from "../../store/studyData.js";
 
-import "./Global.css";
+import "../../Global.css";
 
 const CanvasComponent = ({ arrowColor }) => {
   const originalImg = useRef(null);

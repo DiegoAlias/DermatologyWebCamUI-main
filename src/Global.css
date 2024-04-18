@@ -41,3 +41,48 @@ body {
   padding-bottom: 3px;
   margin-bottom: 10px;
 }
+
+.bg-form {
+  position: relative;
+  border-radius: 45px 85px;
+  background: transparent;
+  padding: 60px 10px;
+  box-shadow: 20px 20px 40px #4b4b4b;
+  backdrop-filter: blur(15px);
+}
+
+.inputbox {
+  position: relative;
+  margin: 30px;
+  width: 310px;
+  border-bottom: 2px solid #4b4b4b;
+}
+
+.inputbox label {
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  transform: translateY(-50%);
+  transition: .5s;
+}
+
+input:focus~label,
+input:valid~label {
+  top: -5px
+}
+
+.inputbox input {
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.icon {
+  position: absolute;
+  right: 10px;
+  top: 15px
+}
+
+.error-message {
+  margin-top: -10px;
+}

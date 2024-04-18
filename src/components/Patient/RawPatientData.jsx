@@ -22,6 +22,7 @@ const RawPatientData = () => {
     <div>
       <div className="bg-userdata">
         <div className="font-bold text-center mt-2 mb-2">Patient Data</div>
+        <div className="text-center mt-2 mb-2">DEMO</div>
         <div className="">{JSON.stringify(patientData)}</div>
       </div>
     </div>

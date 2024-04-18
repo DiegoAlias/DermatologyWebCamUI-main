@@ -1,12 +1,13 @@
 import React from "react";
 
 import CanvasComponent from "./components/NewStudy/CapturedPhotoCanvas.jsx";
+import { Login } from "./components/auth/Login.jsx";
 
 const App = () => {
   return (
-    <div>
+    <>
       <CanvasComponent arrowColor="red" />
-    </div>
+    </>
   );
 };
 
