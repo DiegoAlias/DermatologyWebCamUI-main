@@ -15,14 +15,13 @@ const WebcamComponent = ({
     const webcamRef = useRef(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    // Función para iniciar la cámara web
+    
     const startWebcam = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
                 video: {
-                    width: 1920, // Ancho de Full HD
-                    height: 1080, // Altura de Full HD
+                    width: 2560,  
+                    height: 1440, 
                 },
             });
             webcamRef.current.srcObject = stream;
@@ -37,11 +36,10 @@ const WebcamComponent = ({
         }
     };
 
-    // Inicializar la cámara web al montar el componente
+    
     useEffect(() => {
         startWebcam();
 
-        // Limpieza al desmontar el componente
         return () => {
             const stream = webcamRef.current?.srcObject;
             if (stream) {

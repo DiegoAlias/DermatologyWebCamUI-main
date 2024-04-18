@@ -93,8 +93,8 @@ const ThumbnailComponent = ({
 
       <canvas
         ref={canvasRef}
-        width={120}
-        height={100}
+        width={256}
+        height={144}
         style={{ border: "2px solid #ccc" }}
         className="mx-auto"
       ></canvas>

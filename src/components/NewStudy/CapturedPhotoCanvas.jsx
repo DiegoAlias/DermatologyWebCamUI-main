@@ -1,4 +1,3 @@
-// CanvasComponent.js
 
 import { useEffect, useRef, useState } from "react";
 
@@ -10,7 +9,6 @@ import RawPatientData from "../Patient/RawPatientData.jsx";
 import CoordinatesList from "./ArrowsDescriptionList.jsx";
 import WebcamComponent from "./WebCam.jsx";
 
-import "./Global.css";
 
 //Storing
 import { useArrowCoordinates } from "../../store/arrowCoordinates.js";
@@ -20,7 +18,7 @@ import { useDermatoscopicImage } from "../../store/dermatoscopicImages.js";
 import { usePatientData } from "../../store/patientData.js";
 import { useStudyData } from "../../store/studyData.js";
 
-
+import "./Global.css";
 
 const CanvasComponent = ({ arrowColor }) => {
   const originalImg = useRef(null);
@@ -29,12 +27,9 @@ const CanvasComponent = ({ arrowColor }) => {
   const linesRef = useRef([]);
   const isDrawing = useRef(false);
   const img = useRef(new Image());
-  const [, setRenderTrigger] = useState(false);
-  const [lines, setLines] = useState([]); // Estado para almacenar las líneas
-  const [savedArrowCoordinates, setSavedArrowCoordinates] = useState([]);
+  const [, setRenderTrigger] = useState(false);    
   const [hoveredArrowIndex, setHoveredArrowIndex] = useState(null);
-  const [capturedImage, setCapturedImage] = useState(null);
-  const [capturedImageThumbnail, setCapturedImageThumbnail] = useState(null);
+  const [capturedImage, setCapturedImage] = useState(null);  
   const [capturedImages, setCapturedImages] = useState([]);
   const [capturedArrowsSet, setCapturedArrowsSet] = useState([]);
   const [showDermatoscopicWebcam, setShowDermatoscopicWebcam] = useState(false);
@@ -137,7 +132,7 @@ const CanvasComponent = ({ arrowColor }) => {
     };
     isDrawing.current = true;
     linesRef.current.push({ startPoint, endPoint: startPoint });
-    setLines([...linesRef.current]);
+    
   };
 
   const handleMouseMove = (e) => {
@@ -151,7 +146,7 @@ const CanvasComponent = ({ arrowColor }) => {
       };
       linesRef.current[linesRef.current.length - 1].endPoint = currentEndPoint;
       renderLines();
-      setLines([...linesRef.current]);
+      
     } 
   };
 
@@ -202,13 +197,8 @@ const CanvasComponent = ({ arrowColor }) => {
       arrowNumber: index + 1,
       startPoint: { ...line.startPoint },
       endPoint: { ...line.endPoint },
-    }));
-
-    // Guarda la miniatura y las coordenadas en el estado
-    setCapturedImageThumbnail(thumbnailUrl);
-    setSavedArrowCoordinates(arrowCoordinates);
-
-    // Guarda la miniatura y las coordenadas en el estado
+    }));   
+    
     setCapturedImages([...capturedImages, thumbnailUrl]);
     setCapturedArrowsSet([...capturedArrowsSet, arrowCoordinates]);
 
@@ -295,14 +285,10 @@ const CanvasComponent = ({ arrowColor }) => {
       ) : (
         //DERMATOSCOPIC VIEW
         <div className="flex justify-center">
-          {/* <div className="text-white w-1/6 p-2 text-center rounded-md my-2 mx-2 bg-canvas"> */}
-            {/* <RawPatientData /> */}
-            {/* <CurrentStudy /> */}
-          {/* </div> */}
-
-          {!!showDermatoscopicWebcam && ( // Mostrar WebcamComponent si showDermatoscopicWebcam es verdadero
+        
+          {!!showDermatoscopicWebcam && ( 
             <div className="flex mx-auto justify-center">
-              <div className="w-2/8  text-center my-2 mx-1 p-1 rounded-md bg-canvas">
+              <div className="w-2/1  text-center my-2 ml-6 p-1 rounded-md bg-canvas">
                 <div className="card card-body text-center bg-dark">
                   <WebcamComponent                    
                     capturedArrowsSet={capturedArrowsSet}
