@@ -72,10 +72,10 @@ const ThumbnailComponent = ({
         <button
           className="mt-1 mx-1"
           onClick={() => onRenderImage(thumbnailUrl, arrowCoordinates)}
-          title="Find Image"
+          title="See Image"
         >
           <FaSearch
-            title="Find Image"
+            title="See Image"
             className=" bg-blue-600 p-1.5 rounded-md hover:scale-125 w-6 h-6"
           />
         </button>

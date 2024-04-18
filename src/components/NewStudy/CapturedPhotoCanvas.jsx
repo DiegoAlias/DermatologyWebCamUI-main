@@ -141,15 +141,18 @@ const CanvasComponent = ({ arrowColor }) => {
   };
 
   const handleMouseMove = (e) => {
-    if (!isDrawing.current) return;
-    const rect = canvasRef.current.getBoundingClientRect();
-    const currentEndPoint = {
-      x: (e.clientX - rect.left) * (canvasRef.current.width / rect.width),
-      y: (e.clientY - rect.top) * (canvasRef.current.height / rect.height),
-    };
-    linesRef.current[linesRef.current.length - 1].endPoint = currentEndPoint;
-    renderLines();
-    setLines([...linesRef.current]);
+    //TODO: remove showDermatoscopicWebcam to draw circles ROGEERRRRRRRRRR!!!
+    if(!showDermatoscopicWebcam) {
+      if (!isDrawing.current) return;
+      const rect = canvasRef.current.getBoundingClientRect();
+      const currentEndPoint = {
+        x: (e.clientX - rect.left) * (canvasRef.current.width / rect.width),
+        y: (e.clientY - rect.top) * (canvasRef.current.height / rect.height),
+      };
+      linesRef.current[linesRef.current.length - 1].endPoint = currentEndPoint;
+      renderLines();
+      setLines([...linesRef.current]);
+    } 
   };
 
   const handleMouseUp = () => {
@@ -292,10 +295,10 @@ const CanvasComponent = ({ arrowColor }) => {
       ) : (
         //DERMATOSCOPIC VIEW
         <div className="flex justify-center">
-          <div className="text-white w-1/6 p-2 text-center rounded-md my-2 mx-2 bg-canvas">
-            <RawPatientData />
+          {/* <div className="text-white w-1/6 p-2 text-center rounded-md my-2 mx-2 bg-canvas"> */}
+            {/* <RawPatientData /> */}
             {/* <CurrentStudy /> */}
-          </div>
+          {/* </div> */}
 
           {!!showDermatoscopicWebcam && ( // Mostrar WebcamComponent si showDermatoscopicWebcam es verdadero
             <div className="flex mx-auto justify-center">
@@ -323,12 +326,12 @@ const CanvasComponent = ({ arrowColor }) => {
             >
               <div className="">
                 <h2 className="text-center text-white font-bold my-1">
-                  Captured Image
+                  Captured Clinical Image
                 </h2>
                 <canvas
                   ref={canvasRef}
-                  height={1024}
-                  width={1220}
+                  width={2560}
+                  height={1440}
                   className="canvas-container"
                 ></canvas>
               </div>

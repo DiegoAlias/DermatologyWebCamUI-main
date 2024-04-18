@@ -16,25 +16,32 @@ const WebcamComponent = ({
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const startWebcam = async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: {
-                        width: 1220, // Ancho de Full HD
-                        height: 1024, // Altura de Full HD
-                    },
-                });
-                webcamRef.current.srcObject = stream;
-                setLoading(false);
-            } catch (error) {
-                console.error("Error accessing webcam:", error);
-                setError("Error accessing webcam");
-            }
-        };
+    // Función para iniciar la cámara web
+    const startWebcam = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    width: 1920, // Ancho de Full HD
+                    height: 1080, // Altura de Full HD
+                },
+            });
+            webcamRef.current.srcObject = stream;
+            setLoading(false);
+            setError(null);
+        } catch (error) {
+            console.error("Error accessing webcam:", error);
+            setError("Error accessing webcam. Trying awaing");            
+            setTimeout(() => {
+                startWebcam();
+            }, 3000);
+        }
+    };
 
+    // Inicializar la cámara web al montar el componente
+    useEffect(() => {
         startWebcam();
 
+        // Limpieza al desmontar el componente
         return () => {
             const stream = webcamRef.current?.srcObject;
             if (stream) {
@@ -42,7 +49,7 @@ const WebcamComponent = ({
                 tracks.forEach((track) => track.stop());
             }
         };
-    }, [webcamRef]);
+    }, []);
 
     const handleCapture = () => {
         const imageSrc = webcamRef.current.getScreenshot("image/png");
@@ -61,8 +68,8 @@ const WebcamComponent = ({
                 style={{ width: "100%", height: "auto" }}
                 screenshotFormat="image/png"
                 videoConstraints={{
-                    width: 1220, // Ancho de Full HD
-                    height: 1024, // Altura de Full HD
+                    width: 1920, // Ancho de Full HD
+                    height: 1080, // Altura de Full HD
                 }}
             />
             <div className="row">
