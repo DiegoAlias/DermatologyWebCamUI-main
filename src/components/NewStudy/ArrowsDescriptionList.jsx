@@ -1,5 +1,5 @@
 // CoordinatesList.js
-import React, { useState } from "react";
+import React, { useEffect ,useState } from "react";
 import CoordinatesInput from "./ArrowsDescriptionInput.jsx";
 import { FaTrash, FaSearch } from "react-icons/fa";
 
@@ -10,11 +10,12 @@ const CoordinatesList = ({
   onArrowHover,
   onArrowHoverOff,
 }) => {
-
+ 
   
   const [arrowDescriptions, setArrowDescriptions] = useState(
     new Array(lines.length).fill("")
   );
+
 
   const handleArrowClick = (index) => {
     onDeleteArrow(index);    
@@ -25,7 +26,7 @@ const CoordinatesList = ({
   };
 
   const handleLocateClick = (index) => {
-    onArrowHover(index);
+    onArrowHover(index);    
   };
 
   const handleMouseLeave = () => {
