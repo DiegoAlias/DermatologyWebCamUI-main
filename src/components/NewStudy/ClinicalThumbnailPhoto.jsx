@@ -10,7 +10,7 @@ const ThumbnailComponent = ({
   onShowDermatoscopicWebcam
 }) => {
   const canvasRef = useRef(null);
-  const arrowCoordinates = capturedArrowsSet;
+  // const arrowCoordinates = capturedArrowsSet;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -71,7 +71,7 @@ const ThumbnailComponent = ({
       <div className="my-1 mx-1">
         <button
           className="mt-1 mx-1"
-          onClick={() => onRenderImage(thumbnailUrl, arrowCoordinates)}
+          onClick={() => onRenderImage(thumbnailUrl, capturedArrowsSet)}
           title="See Image"
         >
           <FaSearch
@@ -100,7 +100,7 @@ const ThumbnailComponent = ({
       ></canvas>
 
       <div className="mt-2 mx-1">
-        <button onClick={() => {onRenderImage(thumbnailUrl, arrowCoordinates)
+        <button onClick={() => {onRenderImage(thumbnailUrl, capturedArrowsSet)
                                 onShowDermatoscopicWebcam(true)}}
                 title="Dermatoscopic"
                 >

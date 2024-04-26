@@ -9,7 +9,7 @@ const MainRouter = () => {
             <Routes>
                 {/* Define las rutas para los componentes */}
                 <Route path="/" element={<Login />} />
-                <Route path="/dermatology" element={<App />} />
+                <Route path="/dermatology" element={<App resetApp={()=>window.location.reload(true)} />} />
             </Routes>
         </Router>
     );

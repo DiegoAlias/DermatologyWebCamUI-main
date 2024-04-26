@@ -18,13 +18,15 @@ import { useStudyData } from "../../store/studyData.js";
 
 import "../../Global.css";
 
+import DermatoscopicPhotosList from "./DermatoscopicPhotosList.jsx";
 
-const CanvasComponent = ({arrowColor}) => {
+const CanvasComponent = ({ arrowColor, resetApp }) => {
   const originalImg = useRef(null);
   const canvasRef = useRef(null);
   const ctx = useRef(null);
   const isDrawing = useRef(false);
   const img = useRef(new Image());
+  const [dermatoscopicThumbnail, setDermatoscopicThumbnail] = useState([]);
   const [renderTrigger, setRenderTrigger] = useState(false);
   const [hoveredArrowIndex, setHoveredArrowIndex] = useState(null);
   const [capturedImage, setCapturedImage] = useState(null);
@@ -32,7 +34,7 @@ const CanvasComponent = ({arrowColor}) => {
   const [capturedArrowsSet, setCapturedArrowsSet] = useState([]);
   const [showDermatoscopicWebcam, setShowDermatoscopicWebcam] = useState(false);
   const [arrowDescriptions, setArrowDescriptions] = useState(null);
-  const [showCanvasComponent, setShowCanvasComponent] = useState(true); 
+  const [showCanvasComponent, setShowCanvasComponent] = useState(true);
   const [lines, setLines] = useState([]);
 
   useEffect(() => {
@@ -58,7 +60,12 @@ const CanvasComponent = ({arrowColor}) => {
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [capturedImage, lines, showDermatoscopicWebcam]);
+  }, [
+    capturedImage, 
+    lines, 
+    showDermatoscopicWebcam, 
+    dermatoscopicThumbnail
+  ]);
 
   const renderLines = () => {
     ctx.current.clearRect(
@@ -114,7 +121,7 @@ const CanvasComponent = ({arrowColor}) => {
 
       // Agrega el número en la cola
       ctx.current.fillStyle = arrowColor || "black";
-      ctx.current.font = "24px Arial";
+      ctx.current.font = "50px Arial";
       ctx.current.fillText(
         `${index + 1}`,
         line.endPoint.x + 5,
@@ -124,16 +131,19 @@ const CanvasComponent = ({arrowColor}) => {
   };
 
   const handleMouseDown = (e) => {
-    const rect = canvasRef.current.getBoundingClientRect();
-    const startPoint = {
-      x: (e.clientX - rect.left) * (canvasRef.current.width / rect.width),
-      y: (e.clientY - rect.top) * (canvasRef.current.height / rect.height),
-    };
-    isDrawing.current = true;
-    setLines((prevLines) => [
-      ...prevLines,
-      { startPoint, endPoint: startPoint },
-    ]);
+    // Verificar si ya hay flechas dibujadas
+    if (lines.length === 0) {
+      const rect = canvasRef.current.getBoundingClientRect();
+      const startPoint = {
+        x: (e.clientX - rect.left) * (canvasRef.current.width / rect.width),
+        y: (e.clientY - rect.top) * (canvasRef.current.height / rect.height),
+      };
+      isDrawing.current = true;
+      setLines((prevLines) => [
+        ...prevLines,
+        { startPoint, endPoint: startPoint },
+      ]);
+    }
   };
 
   const handleMouseMove = (e) => {
@@ -150,7 +160,7 @@ const CanvasComponent = ({arrowColor}) => {
     });
     renderLines();
   };
-  
+
   const handleMouseUp = () => {
     isDrawing.current = false;
     renderLines();
@@ -187,7 +197,7 @@ const CanvasComponent = ({arrowColor}) => {
   };
 
   const handleReturnToCam = () => {
-    lines = [];
+    lines.splice(0, lines.length);
     renderLines();
     setRenderTrigger((prev) => !prev);
     setShowCanvasComponent(true);
@@ -204,7 +214,7 @@ const CanvasComponent = ({arrowColor}) => {
     setCapturedImages([...capturedImages, thumbnailUrl]);
     setCapturedArrowsSet([...capturedArrowsSet, arrowCoordinates]);
 
-    lines = [];
+    lines.splice(0, lines.length);
     renderLines();
     setCapturedImage(originalImg.current);
     setRenderTrigger((prev) => !prev);
@@ -224,7 +234,8 @@ const CanvasComponent = ({arrowColor}) => {
 
   const handleRenderImage = (thumbnailUrl, arrowCoordinates) => {
     setCapturedImage(thumbnailUrl);
-    lines = [...arrowCoordinates];
+    lines.splice(0, lines.length);
+    lines.push(...arrowCoordinates);
     renderLines();
     setRenderTrigger((prev) => !prev);
 
@@ -234,9 +245,12 @@ const CanvasComponent = ({arrowColor}) => {
   const onShowDermatoscopicWebcam = (clinicalMode = true) => {
     useClinicalImage.getState().addClinicalImage({ current: img.current.src });
 
-    useArrowCoordinates.getState().addArrowCoordinates(lines);
+    useArrowCoordinates.getState().addArrowCoordinates({ current: lines });
 
     if (!clinicalMode) {
+
+      // setDermatoscopicThumbnail([...dermatoscopicThumbnail, originalImg.current]);
+
       useDermatoscopicImage
         .getState()
         .addDermatoscopicImage({ current: originalImg.current });
@@ -252,18 +266,38 @@ const CanvasComponent = ({arrowColor}) => {
         DermatoscopicImage:
           useDermatoscopicImage.getState().DermatoscopicImage.current,
         AppVisibiltyState: () => {
+          const bootstrapStyle = document.createElement('link');
+          bootstrapStyle.rel = 'stylesheet';
+          bootstrapStyle.type = 'text/css';
+          bootstrapStyle.href = "${def:context}/bootstrap.css";
+          document.head.appendChild(bootstrapStyle);
+      
+          // Agregar enlace para el estilo específico
+          const dinamicaStyles = document.createElement('link');
+          dinamicaStyles.rel = 'stylesheet';
+          dinamicaStyles.href = "${def:context}/dinamica.css";
+          document.head.appendChild(dinamicaStyles);
+          
+          const webCamStyle = document.querySelector('link[href*="/styleDermatologyCamApp.css"]');
+          if (webCamStyle) {
+              webCamStyle.remove();
+          }
+
           document.getElementById("root").hidden = true;
           return {
             status: true,
           };
         },
       };
+
+      console.log(window.currentStudy);
     }
     setShowDermatoscopicWebcam(clinicalMode);
   };
 
-  const onShowClinicalWebcam = (clinicalMode = true) =>
+  const onShowClinicalWebcam = (clinicalMode = true) => {
     setShowDermatoscopicWebcam(clinicalMode);
+  };
 
   const handleArrowDescriptions = (descriptions) => {
     setArrowDescriptions({ descriptions });
@@ -273,7 +307,7 @@ const CanvasComponent = ({arrowColor}) => {
   };
 
   return (
-    <div className="flex mt-8">
+    <div className="flex flex-col mt-8">
       {showCanvasComponent ? (
         <div className="flex mx-auto justify-center">
           <div className="text-white w-1/4 p-2 text-center bg-canvas rounded-md my-2 mx-2">
@@ -282,7 +316,10 @@ const CanvasComponent = ({arrowColor}) => {
           </div>
           <div className="w-2/3 text-center my-2 mx-2 p-2 rounded-md bg-canvas">
             <div className="card card-body text-center bg-dark">
-              <WebcamComponent onCapture={handleCaptureImage} />
+              <WebcamComponent
+                onCapture={handleCaptureImage}
+                handleShowClinicalWebcam={resetApp}
+              />
             </div>
           </div>
         </div>
@@ -358,6 +395,18 @@ const CanvasComponent = ({arrowColor}) => {
                     onShowDermatoscopicWebcam={onShowDermatoscopicWebcam}
                   />
                 </div>
+                {!showDermatoscopicWebcam && (
+                  <div className="flex">
+                    <div className="w-full flex">
+                      <div className="p-2 rounded-md bg-canvas">
+                        <DermatoscopicPhotosList 
+                        thumbnails={dermatoscopicThumbnail} 
+                        capturedArrowsSet={capturedArrowsSet}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </>
             )}
           </div>

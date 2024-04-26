@@ -6,8 +6,8 @@ const CoordinatesInput = ({ description, onDescriptionChange }) => {
       <div className="text-black">
         <input
           type="text"
-          className="rounded-md px-2 w-44"
-          placeholder="Input a arrow description"
+          className="rounded-md px-3 py-1 w-64 text-center"
+          placeholder="Input a arrow tag"
           value={description}
           onChange={(e) => 
             onDescriptionChange(e.target.value)}        
