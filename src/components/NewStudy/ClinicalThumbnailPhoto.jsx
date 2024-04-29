@@ -7,7 +7,7 @@ const ThumbnailComponent = ({
   capturedArrowsSet,
   onDelete,
   onRenderImage,
-  onShowDermatoscopicWebcam
+  onShowDermatoscopicWebcam,
 }) => {
   const canvasRef = useRef(null);
   // const arrowCoordinates = capturedArrowsSet;
@@ -17,14 +17,14 @@ const ThumbnailComponent = ({
     const ctx = canvas.getContext("2d");
     // Limpiar el canvas antes de dibujar
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     const img = new Image();
     img.src = thumbnailUrl;
-    
+
     img.onload = () => {
       // Dibujar la miniatura en el canvas
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      
+
       // Dibujar flechas basadas en las coordenadas
       capturedArrowsSet.forEach((arrow) => {
         const { startPoint, endPoint } = arrow;
@@ -67,7 +67,6 @@ const ThumbnailComponent = ({
 
   return (
     <div className="text-white">
-      
       <div className="my-1 mx-1">
         <button
           className="mt-1 mx-1"
@@ -79,11 +78,7 @@ const ThumbnailComponent = ({
             className=" bg-blue-600 p-1.5 rounded-md hover:scale-125 w-6 h-6"
           />
         </button>
-        <button 
-          className="mt-1 mx-1" 
-          onClick={onDelete}
-          title="Delete Image"
-          >
+        <button className="mt-1 mx-1" onClick={onDelete} title="Delete Image">
           <FaTrash
             title="Delete Image"
             className="bg-blue-600 p-1.5 rounded-md hover:scale-125 w-6 h-6"
@@ -93,19 +88,22 @@ const ThumbnailComponent = ({
 
       <canvas
         ref={canvasRef}
-        width={256}
-        height={144}
+        width={180}
+        height={124}
         style={{ border: "2px solid #ccc" }}
-        className="mx-auto"
+        className=""
       ></canvas>
 
       <div className="mt-2 mx-1">
-        <button onClick={() => {onRenderImage(thumbnailUrl, capturedArrowsSet)
-                                onShowDermatoscopicWebcam(true)}}
-                title="Dermatoscopic"
-                >
-          <FaMicroscope 
-            className="bg-blue-600 p-1.5 rounded-md hover:scale-125 w-6 h-6" 
+        <button
+          onClick={() => {
+            onRenderImage(thumbnailUrl, capturedArrowsSet);
+            onShowDermatoscopicWebcam(true);
+          }}
+          title="Dermatoscopic"
+        >
+          <FaMicroscope
+            className="bg-blue-600 p-1.5 rounded-md hover:scale-125 w-6 h-6"
             title="Dermatoscopic"
           />
         </button>

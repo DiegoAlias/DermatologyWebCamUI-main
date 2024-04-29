@@ -8,8 +8,7 @@ const DermatoscopicThumbnailComponent = ({ thumbnailUrl }) => {
   return (
     <div className="text-center my-2">
       <div className="mt-2 mx-2">
-      <img width={256} height={144} src={thumbnailUrl} alt="Thumbnail" />
-
+        <img width={256} height={144} src={thumbnailUrl} alt="Thumbnail" />
       </div>
       <button
         onClick={handleDeleteThumbnail}

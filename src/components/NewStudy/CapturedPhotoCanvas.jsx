@@ -7,6 +7,7 @@ import RawPatientData from "../Patient/RawPatientData.jsx";
 // import CurrentStudy from "../Patient/CurrentStudy.jsx";
 import WebcamComponent from "./WebCam.jsx";
 import CoordinatesList from "./ArrowsDescriptionList.jsx";
+import DermatoscopicPhotosList from "./DermatoscopicPhotosList.jsx";
 
 //Storing
 import { useArrowCoordinates } from "../../store/arrowCoordinates.js";
@@ -17,8 +18,6 @@ import { usePatientData } from "../../store/patientData.js";
 import { useStudyData } from "../../store/studyData.js";
 
 import "../../Global.css";
-
-import DermatoscopicPhotosList from "./DermatoscopicPhotosList.jsx";
 
 const CanvasComponent = ({ arrowColor, resetApp }) => {
   const originalImg = useRef(null);
@@ -60,12 +59,7 @@ const CanvasComponent = ({ arrowColor, resetApp }) => {
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [
-    capturedImage, 
-    lines, 
-    showDermatoscopicWebcam, 
-    dermatoscopicThumbnail
-  ]);
+  }, [capturedImage, lines, showDermatoscopicWebcam, dermatoscopicThumbnail]);
 
   const renderLines = () => {
     ctx.current.clearRect(
@@ -248,7 +242,6 @@ const CanvasComponent = ({ arrowColor, resetApp }) => {
     useArrowCoordinates.getState().addArrowCoordinates({ current: lines });
 
     if (!clinicalMode) {
-
       // setDermatoscopicThumbnail([...dermatoscopicThumbnail, originalImg.current]);
 
       useDermatoscopicImage
@@ -266,21 +259,23 @@ const CanvasComponent = ({ arrowColor, resetApp }) => {
         DermatoscopicImage:
           useDermatoscopicImage.getState().DermatoscopicImage.current,
         AppVisibiltyState: () => {
-          const bootstrapStyle = document.createElement('link');
-          bootstrapStyle.rel = 'stylesheet';
-          bootstrapStyle.type = 'text/css';
+          const bootstrapStyle = document.createElement("link");
+          bootstrapStyle.rel = "stylesheet";
+          bootstrapStyle.type = "text/css";
           bootstrapStyle.href = "${def:context}/bootstrap.css";
           document.head.appendChild(bootstrapStyle);
-      
+
           // Agregar enlace para el estilo específico
-          const dinamicaStyles = document.createElement('link');
-          dinamicaStyles.rel = 'stylesheet';
+          const dinamicaStyles = document.createElement("link");
+          dinamicaStyles.rel = "stylesheet";
           dinamicaStyles.href = "${def:context}/dinamica.css";
           document.head.appendChild(dinamicaStyles);
-          
-          const webCamStyle = document.querySelector('link[href*="/styleDermatologyCamApp.css"]');
+
+          const webCamStyle = document.querySelector(
+            'link[href*="/styleDermatologyCamApp.css"]'
+          );
           if (webCamStyle) {
-              webCamStyle.remove();
+            webCamStyle.remove();
           }
 
           document.getElementById("root").hidden = true;
@@ -344,12 +339,8 @@ const CanvasComponent = ({ arrowColor, resetApp }) => {
             </div>
           )}
 
-          <div className="flex justify-center">
-            <div
-              className={`${
-                showDermatoscopicWebcam ? "w-2/3" : "w-2/5"
-              }  my-2 mx-2 p-2 rounded-md bg-canvas`}
-            >
+          <div className="flex flex-wrap justify-center">
+            <div className="w-full sm:w-1/2 my-2 mx-2 p-2 rounded-md bg-canvas">
               <div className="">
                 <h2 className="text-center text-white font-bold my-1">
                   Captured Clinical Image
@@ -396,15 +387,11 @@ const CanvasComponent = ({ arrowColor, resetApp }) => {
                   />
                 </div>
                 {!showDermatoscopicWebcam && (
-                  <div className="flex">
-                    <div className="w-full flex">
-                      <div className="p-2 rounded-md bg-canvas">
-                        <DermatoscopicPhotosList 
-                        thumbnails={dermatoscopicThumbnail} 
-                        capturedArrowsSet={capturedArrowsSet}
-                        />
-                      </div>
-                    </div>
+                  <div className="w-full my-2 p-2 mx-3 rounded-md bg-canvas">
+                    <DermatoscopicPhotosList
+                      thumbnails={dermatoscopicThumbnail}
+                      capturedArrowsSet={capturedArrowsSet}
+                    />
                   </div>
                 )}
               </>
